@@ -1,6 +1,20 @@
 /* -------- Minimals ------------------*/
 const express = require('express');
 const bodyParser = require('body-parser');
+const knex = require('knex');
+
+const postgres = knex({
+  client: 'pg',
+  connection: {
+    host : '127.0.0.1', 
+    user : 'renjith',
+    password : '',
+    database : 'mmp'
+  }
+});
+
+
+
 const app = express();
 
 
@@ -16,12 +30,18 @@ app.use((req,res, next) => {
 
 
 /*--- GET -------------------------------*/
+//Test link 
 app.get('/', (req, res) => {
-	res.send("<h1>Renjith's Hello world from Node & Express</h1>");
+	res.send("<h1> [  MMP Home Page (RC)  ] </h1>");
 })
 
-app.get('/profile', (req, res) => {
-	res.send("<h1>Getting profile...</h1>");
+app.get('/test', (req, res) => {
+	postgres.select('*').from('test').then( data => {
+		//console.log(data);
+		res.send(data);
+	})
+	.catch (err => res.status (400).json(err))
+	
 })
 
 /*--- POST-------------------------------*/
